@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "skillName": "place-xingtu-recruitment-order",
+  "version": "1.0.0-rc.12",
+  "files": [
+    {
+      "file": "SKILL.md",
+      "sha256": "1d9c790c4514eb7470abbf4b74e51194d4c3f643536e3891eb86b6ea2f134685"
+    },
+    {
+      "file": "agents/openai.yaml",
+      "sha256": "0ec1b30797bffaabdef89b96639bb9760519d9612868b987a4609e8b7cc52406"
+    },
+    {
+      "file": "references/business-rules.schema.v2.json",
+      "sha256": "801f4e3370c99cb6d6ad7fb4c1a37f190cacfb1819f53b05663a22d40978c8d0"
+    },
+    {
+      "file": "references/business-rules.v2026-08-17-r1.json",
+      "sha256": "fe431a8d6207c863c278a716a15e60f4f23bd36b2f6a14d32565d6bc54a8f909"
+    },
+    {
+      "file": "references/executor-contract.md",
+      "sha256": "be0b52022bde18f1f665915e9655071a2f027d98f9d56750ca37533450034a43"
+    },
+    {
+      "file": "references/release.json",
+      "sha256": "5f5799fc227cb1b0c714ec9aca02dbf7c965715dcdb6b9f57f5f8ae7fbc69293"
+    },
+    {
+      "file": "references/workflow.md",
+      "sha256": "df4df54cc9b47f404e035ddbb19534e5b16c409fad5113a9bc39fd2ce9712ba2"
+    },
+    {
+      "file": "references/xingtu-ui-contract.schema.v2.json",
+      "sha256": "8ef8e74bd58c445ab3ed0603eed759a53324e896bdf8e804ddbac36ef7c0bda0"
+    },
+    {
+      "file": "references/xingtu-ui-contract.v2026-08-19.json",
+      "sha256": "baa4190b215f5064d0e5f74d8dabc222d074f9015008cbebe47f9ae5ac9fe938"
+    },
+    {
+      "file": "scripts/lib/action-policy.mjs",
+      "sha256": "7740b1aec292c4acb4418f1c2461025594a551cd874d4975962d4b668723bb3e"
+    },
+    {
+      "file": "scripts/lib/active-operation-store.mjs",
+      "sha256": "6c2b9d6f3900ec188c2955f21aa2fbcadf25b5daf682ce8c5edc5920a0405177"
+    },
+    {
+      "file": "scripts/lib/ego-recruitment-adapter.mjs",
+      "sha256": "f99cb33300dd0797fec4b0837bb50c165cc6f3399bbcdf13c18107593723f74d"
+    },
+    {
+      "file": "scripts/lib/ego-recruitment-driver.mjs",
+      "sha256": "3d0ea1812a157639f2d3005f3b35c281e82df9f331acfd68ee08e7fb46d54536"
+    },
+    {
+      "file": "scripts/lib/escalation-store.mjs",
+      "sha256": "5cbc347d865a4784609f024440b67e350e4593b7664df04fcd09496affd2214b"
+    },
+    {
+      "file": "scripts/lib/landing-page.mjs",
+      "sha256": "30c191ca8be31c480a2c6614bd1d7899036bfea3ae8422f054818db274ef068a"
+    },
+    {
+      "file": "scripts/lib/locks.mjs",
+      "sha256": "b216ce3264edcc6315824b0617d335b331c0c7f1783eb9b6b1a92e4e6eb70ddd"
+    },
+    {
+      "file": "scripts/lib/manifest.mjs",
+      "sha256": "f4b0aa02d2312a9cd0309e17b0bb8c76b79263374da526868c8399a9f9bd838e"
+    },
+    {
+      "file": "scripts/lib/order-snapshot.mjs",
+      "sha256": "9ca3d696ab83de4ad532ab8e60078df6fa5e5a96c9cd8a7cf789f52686413f48"
+    },
+    {
+      "file": "scripts/lib/recovery.mjs",
+      "sha256": "81e18af89033f30ead29231f0ecf54ba9f85a9470aa2fe8c5d03a825e8b614bb"
+    },
+    {
+      "file": "scripts/lib/recruitment-batch-store.mjs",
+      "sha256": "9e86e892ca37f7146d744a7efed8f85a770be910d85cd4fee87bf82c1ce1f770"
+    },
+    {
+      "file": "scripts/lib/recruitment-binding-store.mjs",
+      "sha256": "c95f300052ec9988c8c80ffae926d1dc5f152c1758bd5134a5066449c8aa1609"
+    },
+    {
+      "file": "scripts/lib/recruitment-budget-store.mjs",
+      "sha256": "0b17fd2db917a5ccb7f0ba7c5554c1346700b78c9dfd2f4d68abf9d1b95cc7f0"
+    },
+    {
+      "file": "scripts/lib/recruitment-completion-status.mjs",
+      "sha256": "70eba9c341cf2af7765c436061681921ab64939053d7c9ee48b4d1a9de293b3d"
+    },
+    {
+      "file": "scripts/lib/recruitment-date-discovery.mjs",
+      "sha256": "7b930d8219c46010628a7e25d3a639979ecddbdcd1b9f585d256df69c70f2c85"
+    },
+    {
+      "file": "scripts/lib/recruitment-deadline.mjs",
+      "sha256": "1444dcd474dff3aaf6a3c0b4e41c84dbdb501d70771510c1c5fd4093d3954388"
+    },
+    {
+      "file": "scripts/lib/recruitment-domain.mjs",
+      "sha256": "259743e214655df53508bfa3f6548f892d54d6c6afc7e02556af57643552aeb3"
+    },
+    {
+      "file": "scripts/lib/recruitment-ego-skill-runtime.mjs",
+      "sha256": "ad5cb77ed337e06674a4037024ecfa7b7adad53c6261c299e7b6d86fa049a251"
+    },
+    {
+      "file": "scripts/lib/recruitment-intent.mjs",
+      "sha256": "2a26c1f4150bacb88edb760d3b012a8f9894c5b7745a5b6b21cfdc4704762871"
+    },
+    {
+      "file": "scripts/lib/recruitment-live-flow.mjs",
+      "sha256": "e5f9cf44c012e22642e1bce9171fcac20267eee442b8a2ee803afa5c96a0638d"
+    },
+    {
+      "file": "scripts/lib/recruitment-orchestrator.mjs",
+      "sha256": "221223fc840351159769f61ae7412ff18dcce0064daa3529c8efa8b31009d6c5"
+    },
+    {
+      "file": "scripts/lib/recruitment-runtime-binding-store.mjs",
+      "sha256": "dc88f4d3744a8eb1076185c15bdc6f9b228bec849d74293151c0745d6e1750da"
+    },
+    {
+      "file": "scripts/lib/recruitment-split-skill-runtime.mjs",
+      "sha256": "76bced8799b16b4813b0145c8f0a585e9faacb04d3bd0513739b7cb4b238ee23"
+    },
+    {
+      "file": "scripts/lib/redaction.mjs",
+      "sha256": "f2a5458a58f67358a18b7b2b7bee83a0871da70f7d5d231055f2eb14dc300f1d"
+    },
+    {
+      "file": "scripts/lib/rules.mjs",
+      "sha256": "500888976dd0943c7ce0960416540c8c236fcab037847e297bf5d5c866a079e7"
+    },
+    {
+      "file": "scripts/lib/run-identity.mjs",
+      "sha256": "4eb2f5b5f0a18dfd97b8edb82dddb6aacc2169167eeec3f708d000eabcd02411"
+    },
+    {
+      "file": "scripts/lib/run-result.mjs",
+      "sha256": "0a7f223d5f668c7dc84e8ebf61d7c4db7de17b1595be590c52d6e5109fe5bcc3"
+    },
+    {
+      "file": "scripts/lib/run-state.mjs",
+      "sha256": "a8591bf6af018b213a658f74792787828660bbed9fec94a79a303e9ce1810690"
+    },
+    {
+      "file": "scripts/lib/split-manifest.mjs",
+      "sha256": "4e69a36168e10088c3076036e91e0ac73c35111ca60acd91a9e1d2c3e62a2f01"
+    },
+    {
+      "file": "scripts/lib/split-runtime-binding.mjs",
+      "sha256": "36f9a545a362652771ddff46b7658cd4d187068223794ccd95739802c199f739"
+    },
+    {
+      "file": "scripts/lib/split-ui-contract.mjs",
+      "sha256": "70ae701292200f6ad7eee6bc0f5246a9f42ebbd7a41c94d1ebd1a82630c61966"
+    },
+    {
+      "file": "scripts/lib/state-machine.mjs",
+      "sha256": "b141693ac68891028efe34b40331a9b20a15853498535ef42fc85b2043181854"
+    },
+    {
+      "file": "scripts/lib/tier-contract.mjs",
+      "sha256": "49b65205c578838bb6eb4044d3b3291eade64437d0dbbe6908bfbdcda7cf994c"
+    },
+    {
+      "file": "scripts/package-lock.json",
+      "sha256": "f48f516445aa884b0de99e0490ec5d97192155fb15810fd219d087a5d53ca0b4"
+    },
+    {
+      "file": "scripts/package.json",
+      "sha256": "6d3762055f1d83dd6e9e8296d2b9ce6ae6fb6ba9424a4fb18a663187e9b3c7ce"
+    },
+    {
+      "file": "scripts/validate-business-rules.mjs",
+      "sha256": "99cdaea558f7090d95995e8686b9e268bb0322b5e351560dfaabda77a88a5629"
+    }
+  ]
+}

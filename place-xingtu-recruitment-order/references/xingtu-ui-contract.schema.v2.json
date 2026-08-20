@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sanitized Placement/Xingtu UI Contract v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "contractVersion", "sanitizedDataPolicy", "executionBoundary", "routes", "pages", "recruitmentLookup", "statusLabels", "actions", "evidence"],
+  "properties": {
+    "$schema": { "type": "string", "const": "./xingtu-ui-contract.schema.v2.json" },
+    "schemaVersion": { "type": "integer", "const": 2 },
+    "contractVersion": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "sanitizedDataPolicy": { "type": "string", "const": "SEMANTICS_ONLY" },
+    "executionBoundary": { "$ref": "#/$defs/executionBoundary" },
+    "routes": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "$ref": "#/$defs/route" } },
+    "pages": { "$ref": "#/$defs/pages" },
+    "recruitmentLookup": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "string", "enum": ["INTERNAL_TASK_ID", "UNIQUE_ACTIVITY", "INTERNAL_CREATOR_ID", "UNIQUE_ACTIVITY_CREATOR_XINGTU_ID"] } },
+    "statusLabels": { "$ref": "#/$defs/statusLabels" },
+    "actions": { "$ref": "#/$defs/actions" },
+    "evidence": { "$ref": "#/$defs/evidence" }
+  },
+  "$defs": {
+    "executionBoundary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["session", "browser", "connection", "profileMode", "platforms", "tierOrder"],
+      "properties": {
+        "session": { "type": "string", "enum": ["USER_AUTHORIZED_DAILY_CHROME", "EGO_ISOLATED_TASK_SPACE"] },
+        "browser": { "type": "string", "enum": ["GOOGLE_CHROME", "EGO_LITE"] },
+        "connection": { "type": "string", "enum": ["BUNDLED_CHROME_EXTENSION", "EGO_BROWSER_CLI"] },
+        "profileMode": { "type": "string", "enum": ["NO_DEDICATED_PROFILE", "INHERITED_LOGIN_ISOLATED_TASK_SPACE"] },
+        "platforms": { "type": "array", "minItems": 1, "maxItems": 2, "items": { "type": "string", "enum": ["MACOS", "WINDOWS"] } },
+        "tierOrder": { "type": "array", "minItems": 3, "maxItems": 4, "items": { "type": "string", "enum": ["SCRIPTED_CHROME", "GPT_CHROME", "COMPUTER_USE", "EGO_SEMANTIC", "EGO_VISUAL", "HUMAN"] } }
+      }
+    },
+    "route": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "template", "pageId"],
+      "properties": {
+        "id": { "type": "string", "enum": ["INTERNAL_ORDERS", "XINGTU_TASK_MANAGEMENT", "XINGTU_SUBMISSION_DETAIL", "XINGTU_RECRUITMENT_DETAIL"] },
+        "template": { "type": "string", "enum": ["/orders", "/ad/creator/user/task/management", "/ad/creator/submission/detail/{taskId}", "/ad/creator/recruitment/detail/{activityId}"] },
+        "pageId": { "type": "string", "enum": ["INTERNAL_ORDER_LIST", "XINGTU_TASK_MANAGEMENT", "XINGTU_SUBMISSION_DETAIL", "XINGTU_RECRUITMENT_DETAIL"] }
+      }
+    },
+    "exactPage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["routeId", "identityLabel", "requiredLabels"],
+      "properties": {
+        "routeId": { "type": "string", "minLength": 1 },
+        "identityLabel": { "type": "string", "minLength": 1 },
+        "requiredLabels": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "effectiveFilters": {
+      "type": "object", "additionalProperties": false,
+      "required": ["platform", "createdAt", "status", "taskType", "match"],
+      "properties": {
+        "platform": { "type": "string", "const": "抖音" },
+        "createdAt": { "type": "string", "const": "指定日期" },
+        "status": { "type": "string", "const": "待商务下单" },
+        "taskType": { "type": "string", "const": "招募" },
+        "match": { "type": "string", "const": "EXACT" }
+      }
+    },
+    "internalOrdersPage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["routeId", "identityLabels", "effectiveFilters"],
+      "properties": {
+        "routeId": { "type": "string", "const": "INTERNAL_ORDERS" },
+        "identityLabels": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "string", "enum": ["订单管理", "任务类型", "创建时间"] } },
+        "effectiveFilters": { "$ref": "#/$defs/effectiveFilters" }
+      }
+    },
+    "taskManagementPage": {
+      "allOf": [
+        { "$ref": "#/$defs/exactPage" },
+        { "properties": {
+          "routeId": { "const": "XINGTU_TASK_MANAGEMENT" },
+          "identityLabel": { "const": "任务管理" },
+          "requiredLabels": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "string", "enum": ["任务管理", "查看任务详情"] } }
+        } }
+      ]
+    },
+    "submissionDetailPage": {
+      "allOf": [
+        { "$ref": "#/$defs/exactPage" },
+        { "properties": {
+          "routeId": { "const": "XINGTU_SUBMISSION_DETAIL" },
+          "identityLabel": { "const": "任务详情" },
+          "requiredLabels": { "type": "array", "minItems": 1, "maxItems": 1, "items": { "type": "string", "const": "任务详情" } }
+        } }
+      ]
+    },
+    "recruitmentDetailPage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["routeId", "identityLabels", "activityIdBinding", "accountBinding"],
+      "properties": {
+        "routeId": { "type": "string", "const": "XINGTU_RECRUITMENT_DETAIL" },
+        "identityLabels": {
+          "type": "array", "minItems": 4, "maxItems": 4,
+          "prefixItems": [
+            { "const": "招募" }, { "const": "任务ID" },
+            { "const": "全部报名达人" }, { "const": "达人交付情况" }
+          ],
+          "items": false
+        },
+        "activityIdBinding": { "type": "string", "const": "ROUTE_AND_PAGE_EXACT" },
+        "accountBinding": { "type": "string", "const": "advertiser.fixedId" }
+      }
+    },
+    "pages": {
+      "type": "object", "additionalProperties": false,
+      "required": ["internalOrders", "taskManagement", "submissionDetail", "recruitmentDetail"],
+      "properties": {
+        "internalOrders": { "$ref": "#/$defs/internalOrdersPage" },
+        "taskManagement": { "$ref": "#/$defs/taskManagementPage" },
+        "submissionDetail": { "$ref": "#/$defs/submissionDetailPage" },
+        "recruitmentDetail": { "$ref": "#/$defs/recruitmentDetailPage" }
+      }
+    },
+    "statusLabels": {
+      "type": "object", "additionalProperties": false,
+      "required": ["finalRecruitmentOrder"],
+      "properties": {
+        "finalRecruitmentOrder": {
+          "type": "object", "additionalProperties": false,
+          "required": ["label", "completionDecision"],
+          "properties": {
+            "label": { "type": "string", "const": "商务已下单" },
+            "completionDecision": { "type": "string", "const": "CONFIRMED" }
+          }
+        }
+      }
+    },
+    "openTaskDetail": {
+      "type": "object", "additionalProperties": false,
+      "required": ["label", "navigation"],
+      "properties": {
+        "label": { "type": "string", "const": "查看任务详情" },
+        "navigation": { "type": "string", "const": "NEW_TAB" }
+      }
+    },
+    "creatorRowOrderEntry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["label", "targetScope", "semantic"],
+      "properties": {
+        "label": { "type": "string", "const": "下单" },
+        "targetScope": { "type": "string", "const": "EXACT_CREATOR_ROW" },
+        "semantic": { "type": "string", "const": "OPEN_RECRUITMENT_ORDER_FLOW" }
+      }
+    },
+    "forbiddenGlobalAction": {
+      "type": "object", "additionalProperties": false,
+      "required": ["label", "targetScope", "availability"],
+      "properties": {
+        "label": { "type": "string", "const": "发布任务" },
+        "targetScope": { "type": "string", "const": "GLOBAL_HEADER" },
+        "availability": { "type": "string", "const": "FORBIDDEN" }
+      }
+    },
+    "deliveryDeadline": {
+      "type": "object", "additionalProperties": false,
+      "required": ["label", "valueRule", "persistedReread"],
+      "properties": {
+        "label": { "type": "string", "const": "交付截止日期" },
+        "valueRule": { "type": "string", "const": "recruitment.deliveryDeadline" },
+        "persistedReread": {
+          "type": "object", "additionalProperties": false,
+          "required": ["surface", "required", "match"],
+          "properties": {
+            "surface": { "type": "string", "const": "DELIVERY_DETAIL" },
+            "required": { "type": "boolean", "const": true },
+            "match": { "type": "string", "const": "EXACT" }
+          }
+        }
+      }
+    },
+    "finalSubmit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["label", "availability", "stateful"],
+      "properties": {
+        "label": { "type": "string", "const": "立即下单" },
+        "availability": { "type": "string", "const": "ENABLED" },
+        "stateful": { "type": "boolean", "const": true }
+      }
+    },
+    "businessRole": {
+      "type": "object", "additionalProperties": false,
+      "required": ["switchLabel", "requiredRole", "alternateRole", "verification"],
+      "properties": {
+        "switchLabel": { "type": "string", "const": "切换角色" },
+        "requiredRole": { "type": "string", "const": "商务" },
+        "alternateRole": { "type": "string", "const": "采购" },
+        "verification": { "type": "string", "const": "FRESH_REREAD" }
+      }
+    },
+    "readBudget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["totalLabel", "consumedLabel", "activityBinding"],
+      "properties": {
+        "totalLabel": { "type": "string", "const": "任务总预算" },
+        "consumedLabel": { "type": "string", "const": "消耗预算" },
+        "activityBinding": { "type": "string", "const": "ROUTE_AND_PAGE_EXACT" }
+      }
+    },
+    "topUpBudget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["label", "amountMinorUnits", "confirmLabel", "paymentLabels", "stateful"],
+      "properties": {
+        "label": { "type": "string", "const": "追加预算" },
+        "amountMinorUnits": { "type": "integer", "const": 1000000 },
+        "confirmLabel": { "type": "string", "const": "确定" },
+        "paymentLabels": {
+          "type": "array", "minItems": 2, "maxItems": 2,
+          "prefixItems": [{ "const": "需支付金额" }, { "const": "平台服务费" }],
+          "items": false
+        },
+        "stateful": { "type": "boolean", "const": true }
+      }
+    },
+    "rereadBudget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["expectedIncrementMinorUnits", "match"],
+      "properties": {
+        "expectedIncrementMinorUnits": { "type": "integer", "const": 1000000 },
+        "match": { "type": "string", "const": "EXACT" }
+      }
+    },
+    "actions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["openTaskDetail", "recruitmentCreatorRowOrderEntry", "forbiddenRecruitmentGlobalAction", "recruitmentDeliveryDeadline", "recruitmentFinalSubmit"],
+      "properties": {
+        "openTaskDetail": { "$ref": "#/$defs/openTaskDetail" },
+        "recruitmentCreatorRowOrderEntry": { "$ref": "#/$defs/creatorRowOrderEntry" },
+        "forbiddenRecruitmentGlobalAction": { "$ref": "#/$defs/forbiddenGlobalAction" },
+        "recruitmentDeliveryDeadline": { "$ref": "#/$defs/deliveryDeadline" },
+        "recruitmentFinalSubmit": { "$ref": "#/$defs/finalSubmit" },
+        "ensureInternalBusinessRole": { "$ref": "#/$defs/businessRole" },
+        "readRecruitmentBudget": { "$ref": "#/$defs/readBudget" },
+        "topUpRecruitmentBudget": { "$ref": "#/$defs/topUpBudget" },
+        "rereadRecruitmentBudget": { "$ref": "#/$defs/rereadBudget" }
+      }
+    },
+    "inspectionStatus": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status"],
+      "properties": { "status": { "type": "string", "const": "COMPLETED" } }
+    },
+    "acceptanceStatus": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status"],
+      "properties": { "status": { "type": "string", "enum": ["COMPLETED", "PENDING"] } }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["artifactPolicy"],
+      "properties": {
+        "dailyChromeReadOnlyInspection": { "$ref": "#/$defs/inspectionStatus" },
+        "egoLiteOrderIdLiveAcceptance": { "$ref": "#/$defs/acceptanceStatus" },
+        "egoLiteDateModeLiveAcceptance": { "$ref": "#/$defs/acceptanceStatus" },
+        "artifactPolicy": { "type": "string", "const": "NO_IDS_DOM_SCREENSHOTS_COOKIES_TOKENS_OR_PROFILE_DATA" }
+      }
+    }
+  }
+}

@@ -1,0 +1,295 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Place Xingtu Order Business Rules v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "schemaVersion", "rulesVersion", "integritySha256", "scope",
+    "executionV2", "advertiser", "landingPage", "writeback", "identifiers",
+    "numbering", "monitoring", "common", "actionPermissions", "submission", "recruitment"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "const": "./business-rules.schema.v2.json" },
+    "schemaVersion": { "type": "integer", "const": 2 },
+    "rulesVersion": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}(-r[1-9][0-9]*)?$" },
+    "integritySha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["platform", "account", "internalOrderPlatformUrl"],
+      "properties": {
+        "platform": { "type": "string", "const": "DOUYIN_XINGTU" },
+        "account": { "type": "string", "const": "AIHUISHOU_MAIN" },
+        "internalOrderPlatformUrl": { "type": "string", "pattern": "^https://" }
+      }
+    },
+    "executionV2": {
+      "type": "object", "additionalProperties": false,
+      "required": ["executableOrderTypes", "rejectedOrderTypes", "oneOrderAtATime"],
+      "properties": {
+        "executableOrderTypes": {
+          "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true,
+          "items": { "type": "string", "enum": ["RECRUITMENT", "SUBMISSION"] }
+        },
+        "rejectedOrderTypes": {
+          "type": "array", "minItems": 1, "maxItems": 1, "uniqueItems": true,
+          "items": { "type": "string", "const": "DIRECTED" }
+        },
+        "oneOrderAtATime": { "type": "boolean", "const": true }
+      }
+    },
+    "uiContractRelease": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contractVersion"],
+      "properties": {
+        "contractVersion": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" }
+      }
+    },
+    "advertiser": {
+      "type": "object", "additionalProperties": false,
+      "required": ["fixedId", "disabledLegacyIds"],
+      "properties": {
+        "fixedId": { "type": "string", "const": "1762153969171463" },
+        "disabledLegacyIds": {
+          "type": "array", "minItems": 6, "maxItems": 6, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[0-9]+$" }
+        }
+      }
+    },
+    "landingPage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["defaultId", "fallbackOrder", "automaticFallback", "fallbackConfirmationGate", "modeApplicability"],
+      "properties": {
+        "defaultId": { "type": "string", "const": "6" },
+        "fallbackOrder": {
+          "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true,
+          "items": { "type": "string", "enum": ["7", "8", "9"] }
+        },
+        "automaticFallback": { "type": "boolean", "const": false },
+        "fallbackConfirmationGate": { "$ref": "#/$defs/fallbackConfirmationGate" },
+        "modeApplicability": {
+          "type": "object", "additionalProperties": false,
+          "required": ["submission", "recruitment"],
+          "properties": {
+            "submission": { "type": "boolean", "const": true },
+            "recruitment": { "type": "boolean", "const": true }
+          }
+        }
+      }
+    },
+    "writeback": {
+      "type": "object", "additionalProperties": false,
+      "required": ["submission", "recruitment"],
+      "properties": {
+        "submission": { "$ref": "#/$defs/generatedWritebackRule" },
+        "recruitment": { "$ref": "#/$defs/recruitmentWritebackRule" }
+      }
+    },
+    "identifiers": {
+      "type": "object", "additionalProperties": false,
+      "required": ["recruitmentActivityId", "internalCreatorId", "creatorXingtuId", "creatorMatch", "nicknameChangeAllowed"],
+      "properties": {
+        "recruitmentActivityId": { "$ref": "#/$defs/identifierComparison" },
+        "internalCreatorId": { "$ref": "#/$defs/identifierSource" },
+        "creatorXingtuId": { "$ref": "#/$defs/identifierSource" },
+        "creatorMatch": {
+          "type": "object", "additionalProperties": false,
+          "required": ["left", "right", "relation"],
+          "properties": {
+            "left": { "type": "string", "const": "internalCreatorId" },
+            "right": { "type": "string", "const": "creatorXingtuId" },
+            "relation": { "type": "string", "const": "EQUALS" }
+          }
+        },
+        "nicknameChangeAllowed": { "type": "boolean", "const": true }
+      }
+    },
+    "numbering": {
+      "type": "object", "additionalProperties": false,
+      "required": ["submission"],
+      "properties": { "submission": { "$ref": "#/$defs/submissionNumbering" } }
+    },
+    "monitoring": {
+      "type": "object", "additionalProperties": false,
+      "required": ["clickTemplate", "exposureTemplate"],
+      "properties": {
+        "clickTemplate": { "type": "string", "pattern": "^https://" },
+        "exposureTemplate": { "type": "string", "pattern": "^https://" }
+      }
+    },
+    "common": {
+      "type": "object", "additionalProperties": false,
+      "required": ["projectTaskLimit", "douPlusDefault", "marketingPromotionDefault", "referenceAsset"],
+      "properties": {
+        "projectTaskLimit": { "type": "integer", "minimum": 1 },
+        "douPlusDefault": { "type": "boolean", "const": false },
+        "marketingPromotionDefault": { "type": "boolean", "const": false },
+        "referenceAsset": { "type": "string", "const": "references/assets/爱回收logo.png" }
+      }
+    },
+    "actionPermissions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["submission", "recruitment"],
+      "properties": {
+        "submission": { "$ref": "#/$defs/submissionPermissions" },
+        "recruitment": { "$ref": "#/$defs/recruitmentPermissions" }
+      }
+    },
+    "submission": {
+      "type": "object", "additionalProperties": false,
+      "required": ["taskConfiguration", "budgetSource", "minimumCpm", "minimumBudget", "maximumPrice", "submissionAttempts", "deadlineOffsetDays", "creatorUidDoubleCheck", "bfRequirement", "assetSource", "completionStatus"],
+      "properties": {
+        "taskConfiguration": {
+          "type": "object", "additionalProperties": false,
+          "required": ["taskKind", "hardRequirementEnabled", "specialRequirements"],
+          "properties": {
+            "taskKind": { "type": "string", "const": "SHORT_VIDEO_SUBMISSION" },
+            "hardRequirementEnabled": { "type": "boolean", "const": false },
+            "specialRequirements": { "type": "string", "const": "NONE" }
+          }
+        },
+        "budgetSource": { "type": "string", "const": "internalOrder.upperPrice" },
+        "minimumCpm": { "type": "number", "const": 5 },
+        "minimumBudget": { "type": "number", "const": 10000 },
+        "maximumPrice": { "type": "number", "const": 10000 },
+        "submissionAttempts": { "type": "integer", "const": 2 },
+        "deadlineOffsetDays": { "type": "integer", "const": 7 },
+        "creatorUidDoubleCheck": { "type": "boolean", "const": true },
+        "bfRequirement": { "type": "string", "const": "NOT_REQUIRED" },
+        "assetSource": { "type": "string", "const": "BUILT_IN_LOGO" },
+        "completionStatus": { "type": "string", "const": "商务已下单" }
+      }
+    },
+    "recruitment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["existingActivityOnly", "createMonthlyActivity", "numbering", "oneCreatorAtATime", "completionStatus", "sameBusinessErrorThreshold", "verificationFields"],
+      "properties": {
+        "existingActivityOnly": { "type": "boolean", "const": true },
+        "createMonthlyActivity": { "type": "boolean", "const": false },
+        "numbering": { "type": "string", "const": "NONE" },
+        "oneCreatorAtATime": { "type": "boolean", "const": true },
+        "budgetTopUp": {
+          "type": "object", "additionalProperties": false,
+          "required": ["stepMinorUnits", "maxPerActivityPerBatch", "maxPerBatch", "requiresExplicitInsufficientBudgetEvidence"],
+          "properties": {
+            "stepMinorUnits": { "type": "integer", "const": 1000000 },
+            "maxPerActivityPerBatch": { "type": "integer", "const": 1 },
+            "maxPerBatch": { "type": "integer", "const": 3 },
+            "requiresExplicitInsufficientBudgetEvidence": { "type": "boolean", "const": true }
+          }
+        },
+        "deliveryDeadline": {
+          "type": "object", "additionalProperties": false,
+          "required": ["basis", "timeZone", "internalPlannedPublishDatePolicy"],
+          "properties": {
+            "basis": { "type": "string", "enum": ["ORDER_CALENDAR_MONTH_END", "CURRENT_OPERATION_CALENDAR_MONTH_END"] },
+            "timeZone": { "type": "string", "const": "Asia/Shanghai" },
+            "internalPlannedPublishDatePolicy": { "type": "string", "const": "IGNORE" }
+          }
+        },
+        "completionStatus": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^(?!.*[\\u0000-\\u001F\\u007F-\\u009F\\u00AD\\u200B-\\u200F\\u202A-\\u202E\\u2060-\\u206F\\uFEFF])\\S(?:[\\s\\S]*\\S)?$"
+        },
+        "sameBusinessErrorThreshold": { "type": "integer", "const": 3 },
+        "verificationFields": {
+          "type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true,
+          "items": { "type": "string", "enum": ["ACTIVITY_ID", "INTERNAL_CREATOR_ID", "XINGTU_CREATOR_ID", "PRICE", "DATE"] }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "fallbackConfirmationGate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["required", "blockedResult", "tokenBindings", "singleUse"],
+      "properties": {
+        "required": { "type": "boolean", "const": true },
+        "blockedResult": { "type": "string", "const": "NEEDS_HUMAN" },
+        "tokenBindings": {
+          "type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true,
+          "items": { "type": "string", "enum": ["runId", "orderFingerprint", "rulesVersion", "candidateId"] }
+        },
+        "singleUse": { "type": "boolean", "const": true }
+      }
+    },
+    "generatedWritebackRule": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "value", "verificationRequired"],
+      "properties": {
+        "source": { "type": "string", "const": "xingtu.generatedTask.detail" },
+        "value": { "type": "string", "const": "generatedVerifiedTaskId" },
+        "verificationRequired": { "type": "boolean", "const": true }
+      }
+    },
+    "recruitmentWritebackRule": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "value", "verificationRequired"],
+      "properties": {
+        "source": { "type": "string", "const": "internalOrder.taskId" },
+        "value": { "type": "string", "const": "originalRecruitmentActivityId" },
+        "verificationRequired": { "type": "boolean", "const": true }
+      }
+    },
+    "identifierSource": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source"],
+      "properties": { "source": { "type": "string", "minLength": 1 } }
+    },
+    "identifierComparison": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "compareTo"],
+      "properties": {
+        "source": { "type": "string", "const": "internalOrder.taskId" },
+        "compareTo": { "type": "string", "const": "xingtu.recruitmentActivity.id" }
+      }
+    },
+    "submissionNumbering": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "scope", "countWhen", "excludedStates", "undetermined", "nameTemplate"],
+      "properties": {
+        "source": { "type": "string", "const": "xingtu.taskManagement" },
+        "scope": { "type": "string", "const": "creatorSubmissionStartCalendarMonth" },
+        "countWhen": {
+          "type": "object", "additionalProperties": false,
+          "required": ["creationState", "effectiveState"],
+          "properties": {
+            "creationState": { "type": "string", "const": "SUCCESSFUL" },
+            "effectiveState": { "type": "string", "const": "EFFECTIVE" }
+          }
+        },
+        "excludedStates": {
+          "type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true,
+          "items": { "type": "string", "enum": ["UNPUBLISHED", "CANCELLED", "WRONG_ORDER", "PUBLISH_FAILED", "INEFFECTIVE"] }
+        },
+        "undetermined": { "type": "string", "const": "HUMAN_DETERMINATION_REQUIRED" },
+        "nameTemplate": { "type": "string", "const": "爱回收 CPM投稿 {creatorName} {month}月-{sequence}" }
+      }
+    },
+    "submissionPermissions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["publish", "internalConfirmation", "login", "captcha", "securityVerification", "landingPageFallback"],
+      "properties": {
+        "publish": { "type": "string", "const": "USER" },
+        "internalConfirmation": { "type": "string", "const": "AGENT" },
+        "login": { "type": "string", "const": "USER" },
+        "captcha": { "type": "string", "const": "USER" },
+        "securityVerification": { "type": "string", "const": "USER" },
+        "landingPageFallback": { "type": "string", "const": "USER" }
+      }
+    },
+    "recruitmentPermissions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["publish", "internalConfirmation", "login", "captcha", "securityVerification", "landingPageFallback"],
+      "properties": {
+        "publish": { "type": "string", "const": "AGENT" },
+        "internalConfirmation": { "type": "string", "const": "AGENT" },
+        "login": { "type": "string", "const": "USER" },
+        "captcha": { "type": "string", "const": "USER" },
+        "securityVerification": { "type": "string", "const": "USER" },
+        "landingPageFallback": { "type": "string", "const": "USER" }
+      }
+    }
+  }
+}

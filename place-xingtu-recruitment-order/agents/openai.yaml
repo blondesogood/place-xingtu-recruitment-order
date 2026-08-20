@@ -1,0 +1,4 @@
+interface:
+  display_name: "巨量星图招募下单"
+  short_description: "用 Ego Lite 按订单号或日期处理招募下单并自动恢复"
+  default_prompt: "使用 $place-xingtu-recruitment-order 自动调用 $ego-browser：有订单号时直接处理指定订单；没有订单号时按日期及全部或数量处理，可选达人。输入不清楚时只问一次。"

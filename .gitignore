@@ -1,0 +1,6 @@
+# This repository publishes only the standalone recruitment Skill.
+*
+!.gitignore
+!README.md
+!place-xingtu-recruitment-order/
+!place-xingtu-recruitment-order/**

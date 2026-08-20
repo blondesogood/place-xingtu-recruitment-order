@@ -1,0 +1,56 @@
+{
+  "$schema": "./xingtu-ui-contract.schema.v2.json",
+  "schemaVersion": 2,
+  "contractVersion": "2026-08-19",
+  "sanitizedDataPolicy": "SEMANTICS_ONLY",
+  "executionBoundary": {
+    "session": "EGO_ISOLATED_TASK_SPACE",
+    "browser": "EGO_LITE",
+    "connection": "EGO_BROWSER_CLI",
+    "profileMode": "INHERITED_LOGIN_ISOLATED_TASK_SPACE",
+    "platforms": ["MACOS"],
+    "tierOrder": ["EGO_SEMANTIC", "EGO_VISUAL", "HUMAN"]
+  },
+  "routes": [
+    { "id": "INTERNAL_ORDERS", "template": "/orders", "pageId": "INTERNAL_ORDER_LIST" },
+    { "id": "XINGTU_TASK_MANAGEMENT", "template": "/ad/creator/user/task/management", "pageId": "XINGTU_TASK_MANAGEMENT" },
+    { "id": "XINGTU_SUBMISSION_DETAIL", "template": "/ad/creator/submission/detail/{taskId}", "pageId": "XINGTU_SUBMISSION_DETAIL" },
+    { "id": "XINGTU_RECRUITMENT_DETAIL", "template": "/ad/creator/recruitment/detail/{activityId}", "pageId": "XINGTU_RECRUITMENT_DETAIL" }
+  ],
+  "pages": {
+    "internalOrders": {
+      "routeId": "INTERNAL_ORDERS",
+      "identityLabels": ["订单管理", "任务类型", "创建时间"],
+      "effectiveFilters": { "platform": "抖音", "createdAt": "指定日期", "status": "待商务下单", "taskType": "招募", "match": "EXACT" }
+    },
+    "taskManagement": { "routeId": "XINGTU_TASK_MANAGEMENT", "identityLabel": "任务管理", "requiredLabels": ["任务管理", "查看任务详情"] },
+    "submissionDetail": { "routeId": "XINGTU_SUBMISSION_DETAIL", "identityLabel": "任务详情", "requiredLabels": ["任务详情"] },
+    "recruitmentDetail": {
+      "routeId": "XINGTU_RECRUITMENT_DETAIL",
+      "identityLabels": ["招募", "任务ID", "全部报名达人", "达人交付情况"],
+      "activityIdBinding": "ROUTE_AND_PAGE_EXACT",
+      "accountBinding": "advertiser.fixedId"
+    }
+  },
+  "recruitmentLookup": ["INTERNAL_TASK_ID", "UNIQUE_ACTIVITY", "INTERNAL_CREATOR_ID", "UNIQUE_ACTIVITY_CREATOR_XINGTU_ID"],
+  "statusLabels": { "finalRecruitmentOrder": { "label": "商务已下单", "completionDecision": "CONFIRMED" } },
+  "actions": {
+    "openTaskDetail": { "label": "查看任务详情", "navigation": "NEW_TAB" },
+    "recruitmentCreatorRowOrderEntry": { "label": "下单", "targetScope": "EXACT_CREATOR_ROW", "semantic": "OPEN_RECRUITMENT_ORDER_FLOW" },
+    "forbiddenRecruitmentGlobalAction": { "label": "发布任务", "targetScope": "GLOBAL_HEADER", "availability": "FORBIDDEN" },
+    "recruitmentDeliveryDeadline": {
+      "label": "交付截止日期", "valueRule": "recruitment.deliveryDeadline",
+      "persistedReread": { "surface": "DELIVERY_DETAIL", "required": true, "match": "EXACT" }
+    },
+    "recruitmentFinalSubmit": { "label": "立即下单", "availability": "ENABLED", "stateful": true },
+    "ensureInternalBusinessRole": { "switchLabel": "切换角色", "requiredRole": "商务", "alternateRole": "采购", "verification": "FRESH_REREAD" },
+    "readRecruitmentBudget": { "totalLabel": "任务总预算", "consumedLabel": "消耗预算", "activityBinding": "ROUTE_AND_PAGE_EXACT" },
+    "topUpRecruitmentBudget": { "label": "追加预算", "amountMinorUnits": 1000000, "confirmLabel": "确定", "paymentLabels": ["需支付金额", "平台服务费"], "stateful": true },
+    "rereadRecruitmentBudget": { "expectedIncrementMinorUnits": 1000000, "match": "EXACT" }
+  },
+  "evidence": {
+    "egoLiteOrderIdLiveAcceptance": { "status": "COMPLETED" },
+    "egoLiteDateModeLiveAcceptance": { "status": "COMPLETED" },
+    "artifactPolicy": "NO_IDS_DOM_SCREENSHOTS_COOKIES_TOKENS_OR_PROFILE_DATA"
+  }
+}

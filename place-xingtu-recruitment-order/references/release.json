@@ -1,0 +1,13 @@
+{
+  "skillName": "place-xingtu-recruitment-order",
+  "candidateVersion": "1.0.0-rc.12",
+  "schemaVersion": 4,
+  "orderType": "RECRUITMENT",
+  "rulesVersion": "2026-08-17-r1",
+  "rulesFile": "business-rules.v2026-08-17-r1.json",
+  "uiContractVersion": "2026-08-19",
+  "uiContractFile": "xingtu-ui-contract.v2026-08-19.json",
+  "publishAuthority": "AGENT",
+  "internalConfirmationAuthority": "AGENT",
+  "liveAcceptance": "PENDING_CURRENT_REVISION"
+}

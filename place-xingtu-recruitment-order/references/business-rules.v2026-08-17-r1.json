@@ -1,0 +1,131 @@
+{
+  "$schema": "./business-rules.schema.v2.json",
+  "schemaVersion": 2,
+  "rulesVersion": "2026-08-17-r1",
+  "integritySha256": "2f83769cdaa455ced50166031c45a279a85e6f2ab4438721f496b11e49646073",
+  "scope": {
+    "platform": "DOUYIN_XINGTU",
+    "account": "AIHUISHOU_MAIN",
+    "internalOrderPlatformUrl": "https://placement.aihuishou.com/orders"
+  },
+  "executionV2": {
+    "executableOrderTypes": ["RECRUITMENT", "SUBMISSION"],
+    "rejectedOrderTypes": ["DIRECTED"],
+    "oneOrderAtATime": true
+  },
+  "uiContractRelease": {
+    "contractVersion": "2026-08-17"
+  },
+  "advertiser": {
+    "fixedId": "1762153969171463",
+    "disabledLegacyIds": [
+      "1860803013800522", "1860808266285195", "1806234813200384",
+      "1822097842247684", "1822097840698372", "1820760797834249"
+    ]
+  },
+  "landingPage": {
+    "defaultId": "6",
+    "fallbackOrder": ["7", "8", "9"],
+    "automaticFallback": false,
+    "fallbackConfirmationGate": {
+      "required": true,
+      "blockedResult": "NEEDS_HUMAN",
+      "tokenBindings": ["runId", "orderFingerprint", "rulesVersion", "candidateId"],
+      "singleUse": true
+    },
+    "modeApplicability": { "submission": true, "recruitment": true }
+  },
+  "writeback": {
+    "submission": {
+      "source": "xingtu.generatedTask.detail",
+      "value": "generatedVerifiedTaskId",
+      "verificationRequired": true
+    },
+    "recruitment": {
+      "source": "internalOrder.taskId",
+      "value": "originalRecruitmentActivityId",
+      "verificationRequired": true
+    }
+  },
+  "identifiers": {
+    "recruitmentActivityId": {
+      "source": "internalOrder.taskId",
+      "compareTo": "xingtu.recruitmentActivity.id"
+    },
+    "internalCreatorId": { "source": "internalOrder.creatorId" },
+    "creatorXingtuId": { "source": "xingtu.recruitmentActivity.creator.xingtuId" },
+    "creatorMatch": {
+      "left": "internalCreatorId",
+      "right": "creatorXingtuId",
+      "relation": "EQUALS"
+    },
+    "nicknameChangeAllowed": true
+  },
+  "numbering": {
+    "submission": {
+      "source": "xingtu.taskManagement",
+      "scope": "creatorSubmissionStartCalendarMonth",
+      "countWhen": { "creationState": "SUCCESSFUL", "effectiveState": "EFFECTIVE" },
+      "excludedStates": ["UNPUBLISHED", "CANCELLED", "WRONG_ORDER", "PUBLISH_FAILED", "INEFFECTIVE"],
+      "undetermined": "HUMAN_DETERMINATION_REQUIRED",
+      "nameTemplate": "爱回收 CPM投稿 {creatorName} {month}月-{sequence}"
+    }
+  },
+  "monitoring": {
+    "clickTemplate": "https://app-data-analysis.aihuishou.com/application-data-analysis-service/callback/douyin-xintu?ts=TS&os=OS&ua=UA&ip=IP&ipv6=IPV6&model=MODEL&demandId=DEMAND_ID&itemId=ITEM_ID&callbackParam=CALLBACK_PARAM&callbackUrl=CALLBACK_URL&awemeAuthorId=AWEME_AUTHOR_ID&grouping=A&type=click",
+    "exposureTemplate": "https://app-data-analysis.aihuishou.com/application-data-analysis-service/callback/douyin-xintu?ts=TS&os=OS&ua=UA&ip=IP&ipv6=IPV6&model=MODEL&demandId=DEMAND_ID&itemId=ITEM_ID&callbackParam=CALLBACK_PARAM&callbackUrl=CALLBACK_URL&awemeAuthorId=AWEME_AUTHOR_ID&grouping=A&type=exposure"
+  },
+  "common": {
+    "projectTaskLimit": 1000,
+    "douPlusDefault": false,
+    "marketingPromotionDefault": false,
+    "referenceAsset": "references/assets/爱回收logo.png"
+  },
+  "actionPermissions": {
+    "submission": {
+      "publish": "USER", "internalConfirmation": "AGENT", "login": "USER",
+      "captcha": "USER", "securityVerification": "USER", "landingPageFallback": "USER"
+    },
+    "recruitment": {
+      "publish": "AGENT", "internalConfirmation": "AGENT", "login": "USER",
+      "captcha": "USER", "securityVerification": "USER", "landingPageFallback": "USER"
+    }
+  },
+  "submission": {
+    "taskConfiguration": {
+      "taskKind": "SHORT_VIDEO_SUBMISSION",
+      "hardRequirementEnabled": false,
+      "specialRequirements": "NONE"
+    },
+    "budgetSource": "internalOrder.upperPrice",
+    "minimumCpm": 5,
+    "minimumBudget": 10000,
+    "maximumPrice": 10000,
+    "submissionAttempts": 2,
+    "deadlineOffsetDays": 7,
+    "creatorUidDoubleCheck": true,
+    "bfRequirement": "NOT_REQUIRED",
+    "assetSource": "BUILT_IN_LOGO",
+    "completionStatus": "商务已下单"
+  },
+  "recruitment": {
+    "existingActivityOnly": true,
+    "createMonthlyActivity": false,
+    "numbering": "NONE",
+    "oneCreatorAtATime": true,
+    "budgetTopUp": {
+      "stepMinorUnits": 1000000,
+      "maxPerActivityPerBatch": 1,
+      "maxPerBatch": 3,
+      "requiresExplicitInsufficientBudgetEvidence": true
+    },
+    "deliveryDeadline": {
+      "basis": "CURRENT_OPERATION_CALENDAR_MONTH_END",
+      "timeZone": "Asia/Shanghai",
+      "internalPlannedPublishDatePolicy": "IGNORE"
+    },
+    "completionStatus": "商务已下单",
+    "sameBusinessErrorThreshold": 3,
+    "verificationFields": ["ACTIVITY_ID", "INTERNAL_CREATOR_ID", "XINGTU_CREATOR_ID", "PRICE", "DATE"]
+  }
+}
