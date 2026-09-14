@@ -1,0 +1,6 @@
+interface:
+  display_name: "小红书二奢图文 · 0.3 rc.16"
+  short_description: "按授权批次下单回填，独立检查接单并支付"
+  default_prompt: "使用 $place-xiaohongshu-luxury-order 处理明确授权的订单集合；下单并回填，或检查已有授权批次接单并支付，按逐单结果汇总。"
+policy:
+  allow_implicit_invocation: true

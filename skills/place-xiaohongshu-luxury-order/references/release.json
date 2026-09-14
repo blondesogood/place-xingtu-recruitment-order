@@ -1,0 +1,98 @@
+{
+  "skillName": "place-xiaohongshu-luxury-order",
+  "candidateVersion": "0.3.0-rc.16",
+  "implementationRevision": "2026-09-14-writeback-response-v1",
+  "rulesVersion": "2026-09-11-r1",
+  "rulesFile": "business-rules.v2026-09-11-r1.json",
+  "status": "CANDIDATE",
+  "writeEnabled": true,
+  "writeGate": "EXPLICIT_BATCH_AUTHORIZATION_AND_FINAL_FACT_CHECK",
+  "browser": {
+    "provider": "EGO_BROWSER",
+    "binding": "ego-task-space",
+    "allowedOrigins": [
+      "https://placement.aihuishou.com",
+      "https://pgy.xiaohongshu.com"
+    ]
+  },
+  "state": {
+    "authority": "SAVED_AUTHORIZATION_AND_LIVE_PLATFORM_FACTS",
+    "storage": "CONFIGURABLE_ATOMIC_JSON",
+    "schemaVersion": 2,
+    "defaultDirectory": "~/.local/state/xhs-luxury-order",
+    "override": [
+      "input.stateDir",
+      "XHS_STATE_DIR"
+    ],
+    "mutex": "MACOS_LOCKF_SHARED_ORDER_FD",
+    "unknownDispatchPolicy": "PERSISTENT_POSITIVE_RECONCILIATION_ONLY",
+    "crossComputerRecovery": "STOP_OLD_EXECUTOR_AND_COPY_COMPLETE_STATE"
+  },
+  "runtime": {
+    "standardEntry": "scripts/standard-runner.mjs",
+    "liveAdapter": "scripts/live-adapter.mjs",
+    "operations": [
+      "ORDER",
+      "PAYMENT"
+    ],
+    "maxAuthorizedOrders": 20,
+    "maxAdvancesPerOrder": 8,
+    "maxRecoveriesPerOrder": 2,
+    "supportedEnvironment": {
+      "agent": "Codex",
+      "os": "macOS",
+      "browser": "Ego Lite",
+      "node": ">=22.16.0",
+      "systemDependency": "/usr/bin/lockf"
+    },
+    "otherEnvironments": "NOT_VERIFIED"
+  },
+  "liveEvidence": {
+    "verifiedDate": "2026-09-11",
+    "technicalRegression": "PASS_36_TESTS",
+    "writebackResponseBrowserFixture": "PASS_10_DELAYED_SAVES_0_ABORTS",
+    "writebackResponseProductionAcceptance": "PENDING_NEW_AUTHORIZED_SAMPLE",
+    "repeatQuery": "PASS",
+    "businessRoleSwitch": "PASS",
+    "existingMappedTitleContinuation": "PASS",
+    "paymentPreview": "PASS",
+    "pendingAndPaidRouting": "PASS",
+    "singleMemberProposalFormPreview": "PASS",
+    "standardCreatePreview": "SUPERSEDED_BY_REAL_CREATE_2026_09_14",
+    "productionCreateAcceptance": "PARTIAL_5_CREATED_4_WRITEBACK_1_WRITEBACK_RECONCILE_REQUIRED",
+    "productionPaymentAcceptance": "PASS_2_REAL_PAYMENTS_2026_09_14",
+    "postClickRecoveryAcceptance": "PENDING",
+    "colleagueAcceptance": "PENDING",
+    "ineligibleFirstOrderIsolation": "PASS",
+    "latestBatchVerifiedDate": "2026-09-14",
+    "latestBatchOutcome": "2_PAID_2_WAITING_ACCEPTANCE_1_WRITEBACK_RECONCILE_REQUIRED"
+  },
+  "contentManifest": "CONTENT-MANIFEST.json",
+  "artifactFiles": [
+    "SKILL.md",
+    "agents/openai.yaml",
+    "references/release.json",
+    "references/business-rules.v2026-09-11-r1.json",
+    "references/workflow.md",
+    "references/runtime-contract.md",
+    "references/standard-entry.md",
+    "scripts/lib/aliases.mjs",
+    "scripts/lib/business-label.mjs",
+    "scripts/lib/operation-store.mjs",
+    "scripts/lib/order-policy.mjs",
+    "scripts/lib/page-facts.mjs",
+    "scripts/live-adapter.mjs",
+    "scripts/page/cart.mjs",
+    "scripts/page/dom-reader.mjs",
+    "scripts/page/ego-driver.mjs",
+    "scripts/page/external.mjs",
+    "scripts/page/internal.mjs",
+    "scripts/page/payment-facts.mjs",
+    "scripts/page/proposal-form.mjs",
+    "scripts/page/proposal.mjs",
+    "scripts/page/writeback-form.mjs",
+    "scripts/page/writeback-submit.mjs",
+    "scripts/standard-runner.mjs",
+    "scripts/validate-release.mjs"
+  ]
+}

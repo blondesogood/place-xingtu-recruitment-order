@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "scope": "RUNTIME_ARTIFACTS",
+  "skillName": "place-xiaohongshu-luxury-order",
+  "version": "0.3.0-rc.16",
+  "files": [
+    {
+      "file": "SKILL.md",
+      "sha256": "4e2b2978549d07e9803bde5f528e8d9ec3a057f572ee4aaf3a5bfa8ea18a46a9",
+      "bytes": 4183
+    },
+    {
+      "file": "agents/openai.yaml",
+      "sha256": "f7d3057ce1dacf3bca5842e80e6cde5b82e33d6de9a8d9bae42a3729f11bb941",
+      "bytes": 370
+    },
+    {
+      "file": "references/business-rules.v2026-09-11-r1.json",
+      "sha256": "2f1a3b752d45c172be3816b6cc0806153f69b52977b143ccb857b7442533a4ac",
+      "bytes": 2081
+    },
+    {
+      "file": "references/release.json",
+      "sha256": "6d3005e42f323e4052d5c4e1d9ec2159c76ccf2f594403c7b3d0ec45a0c42f6b",
+      "bytes": 3418
+    },
+    {
+      "file": "references/runtime-contract.md",
+      "sha256": "4a1c2839643047c6aca657af0d45973420015497c23fdeaf3a134bed3f363e4c",
+      "bytes": 3966
+    },
+    {
+      "file": "references/standard-entry.md",
+      "sha256": "c59d8e0dc93242a81effd37bd314b93c3bced54c455bd07a6cf21d08322e7cad",
+      "bytes": 2340
+    },
+    {
+      "file": "references/workflow.md",
+      "sha256": "1f0d283ba25f0e79d740068f7a06c97078911d6959f5f46a9711b9a9a2964fcb",
+      "bytes": 2512
+    },
+    {
+      "file": "scripts/lib/aliases.mjs",
+      "sha256": "4ae1fa308073ebbf5da3fab0ce2b15ef22b209b665331918e23b27eb7d5891df",
+      "bytes": 3460
+    },
+    {
+      "file": "scripts/lib/business-label.mjs",
+      "sha256": "e69eb60c1bb84ce01a7a9ce83c14fa75d4bf88719b3e7c22850e7d571231582f",
+      "bytes": 449
+    },
+    {
+      "file": "scripts/lib/operation-store.mjs",
+      "sha256": "60257dc16aff5e664dab21c8c99003d5ccfaac8dd52186ef764d424b4d7c5527",
+      "bytes": 5656
+    },
+    {
+      "file": "scripts/lib/order-policy.mjs",
+      "sha256": "c5cd311c281fa3221666d95676d0bb66f118c188c9f24762a7d6b604238c0c6b",
+      "bytes": 3441
+    },
+    {
+      "file": "scripts/lib/page-facts.mjs",
+      "sha256": "d19654954dfc16081356fa5c9729367f3128b66d8f0e4d8e8b3d8d60812f0ce9",
+      "bytes": 5493
+    },
+    {
+      "file": "scripts/live-adapter.mjs",
+      "sha256": "425dd5254595165c45855cb0f625b54628b201e80a13c2978fde4f21d23f03a6",
+      "bytes": 14437
+    },
+    {
+      "file": "scripts/page/cart.mjs",
+      "sha256": "b12e18c43e4f3ee404962904713741011ccbb90c5e9cc09d69b09606e68484bf",
+      "bytes": 3668
+    },
+    {
+      "file": "scripts/page/dom-reader.mjs",
+      "sha256": "446a5985b31eec0d14e85d7cc50d32118df071b97e19662bc87dfe876573723c",
+      "bytes": 7808
+    },
+    {
+      "file": "scripts/page/ego-driver.mjs",
+      "sha256": "c3b5d26b232c92cc4817254a802ed061345b3d969ef04f09bf45035d9ee2b687",
+      "bytes": 18758
+    },
+    {
+      "file": "scripts/page/external.mjs",
+      "sha256": "17009045116423474a5a0de6e87d6996aa67b348c8f573518100510fa47d11ca",
+      "bytes": 4625
+    },
+    {
+      "file": "scripts/page/internal.mjs",
+      "sha256": "4045501ca552aa88729b9c5840d152fd880665957d732e31ca061abc8051034c",
+      "bytes": 1654
+    },
+    {
+      "file": "scripts/page/payment-facts.mjs",
+      "sha256": "59a462aae378311a65560640e8717db8a1a2a5864940b71c7079119f9a2d1d68",
+      "bytes": 4054
+    },
+    {
+      "file": "scripts/page/proposal-form.mjs",
+      "sha256": "3609aca2e3bf26f856288332d1fe0691247a02a1513fe06f32cb0acb257e8c94",
+      "bytes": 11129
+    },
+    {
+      "file": "scripts/page/proposal.mjs",
+      "sha256": "31ae4e51dafdeddf06dbb6e01cba1df489f1ec2b2d7d6352157568ce070ec3f8",
+      "bytes": 2022
+    },
+    {
+      "file": "scripts/page/writeback-form.mjs",
+      "sha256": "ce61ff5910edd8c8432e889ae113e54ed66bfdc3193f5b3a214f5c8b4e2ad1cf",
+      "bytes": 6066
+    },
+    {
+      "file": "scripts/page/writeback-submit.mjs",
+      "sha256": "b951a24cbfbbb77f83ff44c1dc54bfed05572277f8e27a0cd43860413dbf33c4",
+      "bytes": 3341
+    },
+    {
+      "file": "scripts/standard-runner.mjs",
+      "sha256": "0ae823dd3721b505b68c3583893d91791006ff7e2288cf8411ad1d823377cb89",
+      "bytes": 9984
+    },
+    {
+      "file": "scripts/validate-release.mjs",
+      "sha256": "357c13be8dd32992f7fde5c3e7ba1db869bae56262d1514cbd51e46ef95fd935",
+      "bytes": 2657
+    }
+  ]
+}

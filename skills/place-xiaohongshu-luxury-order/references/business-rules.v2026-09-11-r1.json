@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 6,
+  "rulesVersion": "2026-09-11-r1",
+  "timeZone": "Asia/Shanghai",
+  "scope": {
+    "platform": "XIAOHONGSHU_PUGONGYING",
+    "businessLabelKeywordsAny": [
+      "奢侈品",
+      "奢品"
+    ],
+    "businessLabelNormalization": "UNICODE_NFKC_TRIM",
+    "contentType": "IMAGE_TEXT",
+    "internalRole": "商务"
+  },
+  "identity": {
+    "internalPlatformLabel": "小红书",
+    "advertiserAccountLabel": "上海悦川",
+    "advertiserCompanyLabel": "上海悦川网络信息技术有限公司",
+    "reportingBrandLabel": "爱回收奢品回收",
+    "reportingBrandAliases": [
+      "爱回收奢品回收",
+      "爱回收奢侈品回收"
+    ]
+  },
+  "placement": {
+    "templateLabel": "奢侈品2",
+    "cooperationTitlePattern": "爱回收奢品-<内部订单号SHA256前12位>",
+    "publishDatePolicy": "SHANGHAI_TODAY_PLUS_30_NATURAL_DAYS",
+    "retentionDays": 60,
+    "negotiatedPrice": true,
+    "requiredSpuLabels": [
+      "爱回收app",
+      "爱回收奢品回收"
+    ],
+    "cartPolicy": "EMPTY_THEN_EXACT_SINGLE_MEMBER"
+  },
+  "priceCheck": {
+    "currency": "CNY",
+    "minorUnit": "FEN",
+    "serviceFeeRateBasisPoints": 1000,
+    "roundingToleranceMinor": 0,
+    "requiredEquation": "INTERNAL_EQUALS_COOPERATION_AND_TOTAL_EQUALS_110_PERCENT"
+  },
+  "authorization": {
+    "source": "EXPLICIT_ORDER_SET_SAVED_IN_BATCH",
+    "maxOrders": 20,
+    "operations": [
+      "ORDER",
+      "PAYMENT"
+    ],
+    "paymentScope": "EXISTING_BATCH_OR_SUBSET"
+  },
+  "state": {
+    "storage": "CONFIGURABLE_ATOMIC_JSON",
+    "unknownDispatchPolicy": "PERSISTENT_POSITIVE_RECONCILIATION_ONLY",
+    "duplicatePrevention": [
+      "INTERNAL_EXTERNAL_TASK_ID",
+      "EXTERNAL_TITLE_AND_CREATOR",
+      "EXTERNAL_TERMINAL_STATUS",
+      "SHARED_ORDER_FENCE_AND_LOCK"
+    ]
+  },
+  "payment": {
+    "trigger": "EXPLICIT_PAYMENT_CAPABILITY",
+    "internalPrestate": "商务已下单",
+    "externalPrestate": "待支付订单",
+    "finalSteps": [
+      "立即支付",
+      "确定"
+    ],
+    "forbiddenActions": [
+      "取消合作"
+    ]
+  }
+}
