@@ -1,10 +1,9 @@
 {
   "skillName": "place-xiaohongshu-luxury-order",
-  "candidateVersion": "0.3.0-rc.16",
-  "implementationRevision": "2026-09-14-writeback-response-v1",
+  "implementationRevision": "2026-09-14-writeback-verified-v2",
   "rulesVersion": "2026-09-11-r1",
   "rulesFile": "business-rules.v2026-09-11-r1.json",
-  "status": "CANDIDATE",
+  "status": "RELEASED",
   "writeEnabled": true,
   "writeGate": "EXPLICIT_BATCH_AUTHORIZATION_AND_FINAL_FACT_CHECK",
   "browser": {
@@ -25,7 +24,7 @@
       "XHS_STATE_DIR"
     ],
     "mutex": "MACOS_LOCKF_SHARED_ORDER_FD",
-    "unknownDispatchPolicy": "PERSISTENT_POSITIVE_RECONCILIATION_ONLY",
+    "unknownDispatchPolicy": "POSITIVE_RECONCILIATION_OR_EXPLICIT_ONE_TIME_WRITEBACK_RECOVERY",
     "crossComputerRecovery": "STOP_OLD_EXECUTOR_AND_COPY_COMPLETE_STATE"
   },
   "runtime": {
@@ -48,10 +47,10 @@
     "otherEnvironments": "NOT_VERIFIED"
   },
   "liveEvidence": {
-    "verifiedDate": "2026-09-11",
-    "technicalRegression": "PASS_36_TESTS",
+    "verifiedDate": "2026-09-14",
+    "technicalRegression": "PASS_41_TESTS",
     "writebackResponseBrowserFixture": "PASS_10_DELAYED_SAVES_0_ABORTS",
-    "writebackResponseProductionAcceptance": "PENDING_NEW_AUTHORIZED_SAMPLE",
+    "writebackResponseProductionAcceptance": "PASS_ACK_AND_PERSISTENT_MAPPING_READBACK_2026_09_14",
     "repeatQuery": "PASS",
     "businessRoleSwitch": "PASS",
     "existingMappedTitleContinuation": "PASS",
@@ -59,13 +58,14 @@
     "pendingAndPaidRouting": "PASS",
     "singleMemberProposalFormPreview": "PASS",
     "standardCreatePreview": "SUPERSEDED_BY_REAL_CREATE_2026_09_14",
-    "productionCreateAcceptance": "PARTIAL_5_CREATED_4_WRITEBACK_1_WRITEBACK_RECONCILE_REQUIRED",
+    "productionCreateAcceptance": "PASS_5_CREATED_5_WRITEBACK",
     "productionPaymentAcceptance": "PASS_2_REAL_PAYMENTS_2026_09_14",
-    "postClickRecoveryAcceptance": "PENDING",
+    "postClickRecoveryAcceptance": "PROCESS_DEATH_TECHNICAL_TEST_PASS_PRODUCTION_INTERRUPTION_NOT_INDUCED",
     "colleagueAcceptance": "PENDING",
     "ineligibleFirstOrderIsolation": "PASS",
     "latestBatchVerifiedDate": "2026-09-14",
-    "latestBatchOutcome": "2_PAID_2_WAITING_ACCEPTANCE_1_WRITEBACK_RECONCILE_REQUIRED"
+    "latestBatchOutcome": "2_PAID_3_WAITING_ACCEPTANCE",
+    "repeatBatchContinuation": "PASS_3_ORDER_RUNS_AND_PAYMENT_NO_DUPLICATE_ACTIONS"
   },
   "contentManifest": "CONTENT-MANIFEST.json",
   "artifactFiles": [
@@ -93,6 +93,8 @@
     "scripts/page/writeback-form.mjs",
     "scripts/page/writeback-submit.mjs",
     "scripts/standard-runner.mjs",
-    "scripts/validate-release.mjs"
-  ]
+    "scripts/validate-release.mjs",
+    "references/install.md"
+  ],
+  "version": "1.0.0"
 }

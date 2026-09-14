@@ -84,6 +84,39 @@ test('a save ACK alone never clears the WRITEBACK fence',async t=>{
  assert.equal((await runStandard(input,adapter)).orders[0].status,'READY_FOR_PAYMENT');
  assert.equal(saves,1);assert.equal(new OperationStore(dir).order('A').pendingAction,null);
 });
+test('explicit recovery archives one exact old WRITEBACK and cannot replay a new attempt',async t=>{
+ const dir=freshDir(t),batch=await register(dir,['A']),store=new OperationStore(dir);
+ let r={...store.order('A'),externalTaskId:'EXT-A'};r=store.claim(r,batch,'WRITEBACK','EXT-A');
+ const approval={orderId:'A',attemptId:r.pendingAction.attemptId,externalTaskId:'EXT-A',authorizationId:'user-recovery-1',reason:'Explicit retry authorization'};
+ const order=newOrder('A');order.external.matches=payable('A').external.matches;const adapter=adapterFor([order]);let saves=0;
+ adapter.writebackOrder=async({beforeCommit})=>{await beforeCommit();saves++;return {outcome:'UNKNOWN'};};
+ const input={operation:'ORDER',taskId:'test-task',orderIds:['A'],stateDir:dir,writebackRecovery:approval};
+ await runStandard(input,adapter);await runStandard(input,adapter);
+ const after=store.order('A');assert.equal(saves,1);assert.equal(after.writebackRecoveryHistory[0].previousAttempt.attemptId,approval.attemptId);
+ assert.notEqual(after.pendingAction.attemptId,approval.attemptId);
+});
+test('writeback recovery cannot authorize PAY',async t=>{
+ const dir=freshDir(t),batch=await register(dir,['A']),store=new OperationStore(dir);
+ const r=store.claim({...store.order('A'),externalTaskId:'EXT-A'},batch,'PAY','EXT-A');
+ const adapter=adapterFor([payable('A')]);adapter.payOrder=adapter.writebackOrder=async()=>assert.fail('must not dispatch');
+ const approval={orderId:'A',attemptId:r.pendingAction.attemptId,externalTaskId:'EXT-A',authorizationId:'user-recovery-1',reason:'Explicit retry authorization'};
+ const result=await runStandard({operation:'ORDER',taskId:'test-task',orderIds:['A'],stateDir:dir,writebackRecovery:approval},adapter);
+ assert.equal(result.orders[0].status,'RECONCILE_REQUIRED');assert.equal(store.order('A').pendingAction.action,'PAY');
+ assert.equal((await runStandard({operation:'PAYMENT',batchRef:batch.batchRef,orderIds:['A'],stateDir:dir,writebackRecovery:approval},adapter)).reason,'WRITEBACK_RECOVERY_INVALID');
+});
+test('writeback recovery rejects a different mapping or a different batch',async t=>{
+ const dir=freshDir(t),batch=await register(dir,['A']),store=new OperationStore(dir);
+ const r=store.claim({...store.order('A'),externalTaskId:'EXT-A'},batch,'WRITEBACK','EXT-A');
+ const order=newOrder('A');order.external.matches=payable('A').external.matches;
+ const adapter=adapterFor([order]);adapter.writebackOrder=async()=>assert.fail('must not dispatch');
+ const approval={orderId:'A',attemptId:r.pendingAction.attemptId,externalTaskId:'WRONG',authorizationId:'user-recovery-1',reason:'Explicit retry authorization'};
+ for(const [taskId,externalTaskId] of [['test-task','WRONG'],['another-task','EXT-A']]){
+  const result=await runStandard({operation:'ORDER',taskId,orderIds:['A'],stateDir:dir,writebackRecovery:{...approval,externalTaskId}},adapter);
+  assert.equal(result.orders[0].status,'RECONCILE_REQUIRED');assert.equal(result.orders[0].reason,'WRITEBACK_RECOVERY_IDENTITY_MISMATCH');
+  assert.equal(store.order('A').pendingAction.attemptId,r.pendingAction.attemptId);
+  assert.equal(store.order('A').writebackRecoveryHistory,undefined);
+ }
+});
 test('payment has no user-event gate; a post-click error survives the next call',async t=>{
  const dir=freshDir(t),batch=await register(dir,['A']),adapter=adapterFor([payable('A')]);let pays=0;
  adapter.payOrder=async({beforeCommit})=>{await beforeCommit();pays++;throw new Error('READ_FAILED_AFTER_CLICK');};

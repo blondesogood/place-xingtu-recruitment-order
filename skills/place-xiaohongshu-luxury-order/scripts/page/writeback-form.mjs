@@ -4,6 +4,13 @@ import { createHash } from 'node:crypto';
 
 const sha=value=>createHash('sha256').update(String(value)).digest('hex');
 
+export async function waitForAdvertiserOption(driver,target) {
+  await waitForPage(async()=>{
+    try{await driver.probe(target);return true;}
+    catch(error){if(['TARGET_NOT_UNIQUE','TARGET_OBSCURED'].includes(error.message))return false;throw error;}
+  },driver.h,'ADVERTISER_OPTION_UNAVAILABLE');
+}
+
 // Select only the current visible dialog containing the actual task-ID input.
 export function locateWritebackDialog() {
   const visible=e=>{if(!e?.getClientRects().length)return false;for(let p=e;p;p=p.parentElement){const s=getComputedStyle(p);if(s.visibility==='hidden'||s.display==='none'||p.getAttribute('aria-hidden')==='true')return false;}return true;};
@@ -48,7 +55,9 @@ export async function prepareWritebackForm(driver,secret) {
     const choices=await waitForPage(async()=>{const values=await driver.h.js(`(()=>{return [...document.querySelectorAll('[role="option"],.ant-select-item-option')].filter(e=>e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden').map((e,i)=>{e.setAttribute('data-xhs-account-option',String(i));return {label:e.getAttribute('title')||e.innerText.trim(),selector:'[data-xhs-account-option="'+i+'"]'};});})()`);return values.length?values:null;},driver.h,'ADVERTISER_OPTION_NOT_UNIQUE');
     const matching=choices.filter(c=>parseAdvertiserSelection(c.label));
     if(matching.length!==1)throw new Error('ADVERTISER_OPTION_NOT_UNIQUE');
-    await driver.physicalClick({selector:matching[0].selector});
+    const option={selector:matching[0].selector};
+    await waitForAdvertiserOption(driver,option);
+    await driver.physicalClick(option);
   }
   form=await waitForPage(async()=>{const value=await driver.h.js(`(${locateWritebackDialog.toString()})()`);return value.ok&&value.value===secret.externalOrderId&&parseAdvertiserSelection(value.selected)?value:null;},driver.h,'WRITEBACK_FORM_UNVERIFIED');
   if(!form.ok||form.owner!==owner||form.value!==secret.externalOrderId||!parseAdvertiserSelection(form.selected))throw new Error('WRITEBACK_FORM_UNVERIFIED');

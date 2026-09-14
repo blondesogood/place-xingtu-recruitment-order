@@ -6,6 +6,10 @@ function checkedInput(input={}) {
   if(!['ORDER','PAYMENT'].includes(operation))throw new Error('OPERATION_INVALID');
   if(input.orderIds!==undefined&&(!Array.isArray(input.orderIds)||!input.orderIds.length||input.orderIds.length>20||input.orderIds.some(id=>typeof id!=='string'||!id.trim()||id!==id.trim())||new Set(input.orderIds).size!==input.orderIds.length))throw new Error('ORDER_SET_INVALID');
   if(operation==='ORDER'&&(!input.orderIds||typeof input.taskId!=='string'||!input.taskId))throw new Error('ORDER_SET_INVALID');
+  if(input.writebackRecovery){
+    const r=input.writebackRecovery;
+    if(operation!=='ORDER'||input.preview||!input.orderIds.includes(r.orderId)||['attemptId','externalTaskId','authorizationId','reason'].some(k=>typeof r[k]!=='string'||!r[k].trim()||r[k].length>512))throw new Error('WRITEBACK_RECOVERY_INVALID');
+  }
   const prior=input.conversationState;
   if(prior?.schemaVersion===1&&(prior.taskId!==input.taskId||!Array.isArray(prior.orderIds)||prior.orderIds.length!==input.orderIds?.length||!prior.orderIds.every(id=>input.orderIds.includes(id))))throw new Error('CONVERSATION_BATCH_MISMATCH');
   if(prior&&![1,2].includes(prior.schemaVersion))throw new Error('STATE_VERSION_UNSUPPORTED');
@@ -37,6 +41,22 @@ function reconcile(record,order,external) {
     pending.action==='PAY'?external?.externalTaskId===pending.externalTaskId&&terminalStatus(external.status):false;
   if(!resolved)return record;
   return {...record,pendingAction:null,recoveryRequired:false,externalTaskId:external?.externalTaskId??record.externalTaskId};
+}
+
+function authorizedWritebackRecovery(input,record,order,external,batch){
+  const approval=input.writebackRecovery;
+  if(!approval||approval.orderId!==order.orderId||!record.pendingAction)return record;
+  const history=record.writebackRecoveryHistory??[];
+  // An approval is consumed once, including when the renewed save later fails.
+  if(history.some(e=>e.authorizationId===approval.authorizationId))return record;
+  const pending=record.pendingAction;
+  if(pending.action!=='WRITEBACK'||pending.batchRef!==batch.batchRef||pending.attemptId!==approval.attemptId||pending.externalTaskId!==approval.externalTaskId||
+    record.externalTaskId!==approval.externalTaskId||external?.externalTaskId!==approval.externalTaskId||
+    scopeProblem(order.internal)||identityProblem(order.internal,external)||CLOSED_STATUSES.has(external.status)||
+    order.internal.externalTaskId||order.internal.internalStatus!=='待商务下单')throw new Error('WRITEBACK_RECOVERY_IDENTITY_MISMATCH');
+  return {...record,pendingAction:null,lastError:null,lastActionEvidence:null,
+    writebackRecoveryHistory:[...history,{authorizationId:approval.authorizationId,reason:approval.reason,
+      previousAttempt:pending,previousEvidence:record.lastActionEvidence??null,previousError:record.lastError??null,authorizedAt:new Date().toISOString()}]};
 }
 
 function decide(input,order,record,external) {
@@ -81,6 +101,7 @@ async function runOrder(input,adapter,store,batch,orderId) {
         const external=scopeProblem(order.internal)?null:matchingExternal(order);
         if(external){const problem=identityProblem(order.internal,external);if(problem)throw new Error(problem);}
         record=reconcile(record,order,external);
+        record=authorizedWritebackRecovery(input,record,order,external,batch);
         if(external)record={...record,externalTaskId:external.externalTaskId};
         store.saveOrder(record);
         const planned=decide(input,order,record,external);

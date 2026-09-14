@@ -2,17 +2,17 @@
   "schemaVersion": 2,
   "scope": "RUNTIME_ARTIFACTS",
   "skillName": "place-xiaohongshu-luxury-order",
-  "version": "0.3.0-rc.16",
+  "version": "1.0.0",
   "files": [
     {
       "file": "SKILL.md",
-      "sha256": "4e2b2978549d07e9803bde5f528e8d9ec3a057f572ee4aaf3a5bfa8ea18a46a9",
-      "bytes": 4183
+      "sha256": "f0a32dd346e1a83ab5ea2e95c956017f59292a1a2014c25c36883635b642e86c",
+      "bytes": 4492
     },
     {
       "file": "agents/openai.yaml",
-      "sha256": "f7d3057ce1dacf3bca5842e80e6cde5b82e33d6de9a8d9bae42a3729f11bb941",
-      "bytes": 370
+      "sha256": "b58f622dff76907e428c2f6ec295423d2e1851296ce08abbf5006d799c945f6a",
+      "bytes": 366
     },
     {
       "file": "references/business-rules.v2026-09-11-r1.json",
@@ -20,19 +20,24 @@
       "bytes": 2081
     },
     {
+      "file": "references/install.md",
+      "sha256": "c3e70fcee66b68302de9316457a17ed284dd074cd46e7c73b4c9dc7156db6333",
+      "bytes": 2078
+    },
+    {
       "file": "references/release.json",
-      "sha256": "6d3005e42f323e4052d5c4e1d9ec2159c76ccf2f594403c7b3d0ec45a0c42f6b",
-      "bytes": 3418
+      "sha256": "66f26cee8cd1b24d35b64d6e6133f32db130de59019a7ca986e527ba34a7ca7f",
+      "bytes": 3559
     },
     {
       "file": "references/runtime-contract.md",
-      "sha256": "4a1c2839643047c6aca657af0d45973420015497c23fdeaf3a134bed3f363e4c",
-      "bytes": 3966
+      "sha256": "27a8cae8f9e760cfb7a864323769e8b31d5aeec4006840c7f98591f37ee7f1a5",
+      "bytes": 4695
     },
     {
       "file": "references/standard-entry.md",
-      "sha256": "c59d8e0dc93242a81effd37bd314b93c3bced54c455bd07a6cf21d08322e7cad",
-      "bytes": 2340
+      "sha256": "47f7755731243a45936bf78696c1463b3765e48e4b14fd3b8d63469905d6bb43",
+      "bytes": 2403
     },
     {
       "file": "references/workflow.md",
@@ -111,8 +116,8 @@
     },
     {
       "file": "scripts/page/writeback-form.mjs",
-      "sha256": "ce61ff5910edd8c8432e889ae113e54ed66bfdc3193f5b3a214f5c8b4e2ad1cf",
-      "bytes": 6066
+      "sha256": "6d12ca3b4a05a7aba882dd337cf096ec40ef12075b21350a764d85182674b3f2",
+      "bytes": 6445
     },
     {
       "file": "scripts/page/writeback-submit.mjs",
@@ -121,13 +126,13 @@
     },
     {
       "file": "scripts/standard-runner.mjs",
-      "sha256": "0ae823dd3721b505b68c3583893d91791006ff7e2288cf8411ad1d823377cb89",
-      "bytes": 9984
+      "sha256": "ab16c4742dfd531782cc85916ddcc5713032e476e50f9bee89017559e1d8db44",
+      "bytes": 11709
     },
     {
       "file": "scripts/validate-release.mjs",
-      "sha256": "357c13be8dd32992f7fde5c3e7ba1db869bae56262d1514cbd51e46ef95fd935",
-      "bytes": 2657
+      "sha256": "9450c4f7f6c95cba5799d005bb43e36975fc2ec01ec60b720188ebe5bd766808",
+      "bytes": 2642
     }
   ]
 }

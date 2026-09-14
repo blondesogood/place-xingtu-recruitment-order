@@ -28,7 +28,7 @@ const adapter=await createLiveAdapter(helpers,{taskId:'<本次浏览器任务稳
 cliLog(await runStandard(input,adapter));
 ```
 
-两个入口必须共用 stateDir（或相同 XHS_STATE_DIR）。换电脑先停用旧执行器，迁移整个运行目录，再核验登录和记录；不能以空目录重开历史批次。现有未决标记只由平台正向结果解除。
+两个入口必须共用 stateDir（或相同 XHS_STATE_DIR）。换电脑先停用旧执行器，迁移整个运行目录，再核验登录和记录；不能以空目录重开历史批次。未决标记按运行契约对账；用户明确授权的旧回填恢复只适用该契约规定的单次例外。
 
 `listAuthorizedBatches({stateDir})` 只返回真实授权批次（不包含 preview 批次）。调用方从返回值选定原批次，不能扫描平台所有待付款订单并据此建立付款授权。
 

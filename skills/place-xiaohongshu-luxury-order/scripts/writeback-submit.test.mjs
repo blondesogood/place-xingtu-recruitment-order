@@ -1,6 +1,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {submitWriteback,matchesWriteback} from './page/writeback-submit.mjs';
+import {waitForAdvertiserOption} from './page/writeback-form.mjs';
+
+test('advertiser option waits through dropdown animation without clicking',async()=>{
+  let probes=0,waits=0;
+  const target={selector:'[data-xhs-account-option="3"]'};
+  await waitForAdvertiserOption({h:{wait:async()=>{waits++;}},probe:async value=>{
+    assert.equal(value,target);probes++;
+    if(probes===1)throw new Error('TARGET_NOT_UNIQUE');
+    if(probes===2)throw new Error('TARGET_OBSCURED');
+  }},target);
+  assert.equal(probes,3);assert.equal(waits,2);
+});
+
+test('advertiser readiness does not hide unexpected probe failures',async()=>{
+  await assert.rejects(waitForAdvertiserOption({h:{wait:async()=>assert.fail('unexpected wait')},probe:async()=>{throw new Error('BROWSER_OWNERSHIP_LOST');}},{}),/BROWSER_OWNERSHIP_LOST/);
+});
 
 const expected={internalRecordId:'123',externalOrderId:'456',advertiserId:'account'};
 const request={method:'POST',url:'https://h5gate.aihuishou.com/placement-platform-service/api/external-orders?orderId=123',postData:JSON.stringify({externalOrderNo:'456',platformAccountId:'account'})};
